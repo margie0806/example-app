@@ -3,12 +3,15 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpleadoController;
+use App\Http\Controllers\AgendaController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::post('/empleado', [EmpleadoController::class,'store'])->name('empleado.store');
+
+
 
 
 Route::get('/dashboard', function () {
@@ -43,6 +46,24 @@ Route::middleware('auth')->group(function () {
     })->name('listaEmpleado.index');
     Route::get('/listaEmpleado', [EmpleadoController::class, 'show'])->name('listaEmpleado.index');
     
+
+
+
+
+
+
+    //agendando citas 
+
+    Route::get('/agendacita', [AgendaController::class, 'index'])->name('agendacita.index');
+
+// Ruta para almacenar la agenda (asegúrate de implementar el método en el controlador)
+    Route::post('/agendacita', [AgendaController::class, 'store'])->name('agendacita.store');
+
+
+
+
+
+
 });
 
 require __DIR__.'/auth.php';

@@ -120,14 +120,17 @@
                                         </button></h5>
                                         
                                     </header>
+                                    <hr class="modal-header-hr">
                                     <section class="modal-content">
-                                        <label for="modalDate">Fecha:</label>
+                                        <label for="modalDate" class="label-con">Fecha:</label>
+                                        <br>
                                         <input type="date" id="modalDate" class="form-control" required>
                                         <br>
+                                        <label for="modalTime" class="label-con">Hora:</label>
                                         <br>
-                                        <label for="modalTime">Hora:</label>
                                         <input type="time" id="modalTime" class="form-control" required>
                                     </section>
+                                    <hr class="hr-footer">
                                     <footer class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-close>Cancelar</button>
                                         <button type="button" class="btn btn-primary" id="saveChanges">Guardar</button>
@@ -189,7 +192,7 @@
         const calendarEl = document.getElementById('calendar');
 
         const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'timeGridWeek',
+            initialView: 'dayGridMonth',
             events: [
                 {
                     title: 'Cita Agendada',
@@ -422,75 +425,151 @@
 
 
 <style>
-    /* Estilos para el calendario */
-    #calendar {
-        margin: 40px auto;
-    }
+      /* Estilos para el calendario */
+#calendar {
+    margin: 40px auto;
+}
 
-    /* Estilos para el modal */
-    .modal {
-        z-index: 20000;
-        display: none;
-        background-color: rgba(0, 0, 0, 0.5);
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        justify-content: center;
-        align-items: center;
-    }
+/* Estilos para el modal */
+.modal {
+    z-index: 20000;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+}
 
-    .modal.is-visible {
-        display: flex;
-    }
+.modal.is-visible {
+    display: flex;
+}
 
-    .modal-dialog {
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        width: 400px; /* Ancho ajustado del modal */
-    }
+.form-control {
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-top:10px;
+    margin-bottom: 10px; 
+    width: 80%;
+}
 
-    .close-modal {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        
-    }
 
-    .modal-header h5 {
-        margin: 0;
-        font-weight: bold;
-        margin-right: 20px;
-    }
 
-    .modal-footer {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-    }
+.modal-dialog {
+    background-color: #241d2ee7;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 15px;
+    filter: brightness(1);
+    
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 430px; /* Ancho ajustado del modal */
+    height: 360px;
+    display: flex; /* Cambiar a flex para controlar el espaciado */
+    flex-direction: column; /* Organizar los elementos en columna */
+    gap: 10px; /* Espacio uniforme entre elementos */
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.637);
+ 
+}
 
-    .modal-footer .btn {
-        flex: 1;
-        margin: 0 5px;
-    }
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    margin-left: 120px;
+}
 
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-    }
+.close-modal:hover{
+    color: #ff0019;
+}
 
-    .btn-danger {
-        background-color: #dc3545;
-        border: none;
-    }
+.modal-header-hr{
+margin-bottom: 25px;
+}
 
-    .btn-secondary {
-        background-color: #6c757d;
-        border: none;
-    }
+.modal-header h5 {
+    margin: 0;
+    font-weight: bold;
+    margin-right: 20px;
+    text-align: center;
+    align-items: center;
+    color: #fff;
+    text-shadow: 1px 1px 10px rgba(2, 255, 234, 0.884);
+}
+
+.hr-footer{
+margin-top: 20px;
+}
+
+.label-con{
+    margin-left: 20px;
+    color: #fff7f7;
+    font-size: bold;
+    font-weight: 700;
+    text-shadow: 1px 1px 10px rgba(0, 255, 238, 0.959);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    
+    gap: 10px; /* Espacio uniforme entre los botones */
+}
+
+.modal-footer .btn {
+    flex: 1;
+    margin: 0 5px; /* Asegúrate de que haya un margen uniforme */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: 1px solid #4e4e4e;
+    border-radius: 10px;
+    color: white;
+    padding: 5px; /* Añadir padding para aumentar el tamaño del botón */
+    transition: background-color 0.3s, border-color 0.3s; /* Suaviza la transición */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Cambia el color de fondo al pasar el cursor */
+    border-color: #003f7f; /* Cambia el color del borde al pasar el cursor */
+     border-color: #00f7ff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: 1px solid #4e4e4e;
+    border-radius: 10px;
+    color: white;
+    padding: 5px; /* Asegúrate de que todos los botones tengan padding consistente */
+    transition: background-color 0.3s, border-color 0.3s; /* Suaviza la transición */
+    
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Cambia el color de fondo al pasar el cursor */
+    border-color: #a71c1c; /* Cambia el color del borde al pasar el cursor */
+     border-color: #00f7ff;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: 1px solid #4e4e4e;
+    border-radius: 10px;
+    color: white;
+    padding: 5px; /* Consistencia en el tamaño del botón */
+    transition: background-color 0.3s, border-color 0.3s; /* Suaviza la transición */
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* Cambia el color de fondo al pasar el cursor */
+    border-color: #00f7ff; /* Cambia el color del borde al pasar el cursor */
+}
+
 </style>
 
 

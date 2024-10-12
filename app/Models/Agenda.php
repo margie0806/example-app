@@ -5,23 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Empleado extends Model
+class Agenda extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'identificacion',
         'nombres',
-        'apellidos',
         'correo',
-        'direccion',
         'telefono',
-        'tipocontrato',
-        'datesemana',
+        'tiposervicio',
+        'fecha',
+        'empleado_id'  // Se relaciona con el id del empleado
     ];
 
-    public function agendas()
+    public function empleado()
     {
-        return $this->hasMany(Agenda::class);
+        return $this->belongsTo(Empleado::class);
     }
 }

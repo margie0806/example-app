@@ -35,80 +35,80 @@
             @endif
                   
                    
+<form action="{{ route('agendacita.store') }}" method="POST">
+    @csrf
 
-                    <form method="post" action="{{ route('empleado.store') }}">
-                       
-                        @csrf
-                        
-                        
-                       
+    <div class="row">
+        <div class="col-2 form-group">
+            <label for="nombres" class="form-label">Nombres Completos</label>
+            <input type="text" id="nombres" placeholder="Nombre" name="nombres" value="{{ old('nombres') }}" class="form-input-nombre" required>
+            @error('nombres')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
+    </div>
 
-                    <div class="row">
-                        <div class="col-2 form-group">
-                            <label for="nombres" class="form-label">Nombres Completos</label>
-                            <input type="text" id="nombres" placeholder="Nombre" name="nombres" value="{{ old('nombres') }}" class="form-input-nombre">
-                            @error('nombres')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
+    <!-- Alineación de Correo y Teléfono lado a lado -->
+    <div class="row">
+        <div class="col-2 form-group">
+            <label for="correo" class="form-label">Correo</label>
+            <input type="email" id="correo" placeholder="Correo" name="correo" value="{{ old('correo') }}" class="form-input" required>
+            @error('correo')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
+        
+        <div class="col-2 form-group">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="text" id="telefono" placeholder="Teléfono" name="telefono" value="{{ old('telefono') }}" class="form-input" required>
+            @error('telefono')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
+    </div>
 
-                    <!-- Alineación de Correo y Teléfono lado a lado -->
-                    <div class="row">
-                        <div class="col-2 form-group">
-                            <label for="correo" class="form-label">Correo</label>
-                            <input type="email" id="correo" placeholder="Correo" name="correo" value="{{ old('correo') }}" class="form-input">
-                            @error('correo')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        
-                        <div class="col-2 form-group">
-                            <label for="telefono" class="form-label">Teléfono</label>
-                            <input type="text" id="telefono" placeholder="Teléfono" name="telefono" value="{{ old('telefono') }}" class="form-input">
-                            @error('telefono')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
+    <div class="row">
+        <div class="col-2 form-group">
+            <label for="tiposervicio" class="form-label">Tipo Servicio</label>
+            <select id="tiposervicio" name="tiposervicio" class="form-select" required>
+                <option value="">Seleccione un Servicio</option>
+                <option value="Facial" {{ old('tiposervicio') == 'Facial' ? 'selected' : '' }}>Facial</option>
+                <option value="Barba" {{ old('tiposervicio') == 'Barba' ? 'selected' : '' }}>Barba</option>
+                <option value="Acondicionar" {{ old('tiposervicio') == 'Acondicionar' ? 'selected' : '' }}>Acondicionar</option>
+                <option value="Alisar" {{ old('tiposervicio') == 'Alisar' ? 'selected' : '' }}>Alisar</option>
+            </select>
+            @error('tiposervicio')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
 
-                    <div class="row">
-                        <div class="col-2 form-group">
-                            <label for="tipocontrato" class="form-label">Tipo Servicio</label>
-                            <select id="tipocontrato" name="tipocontrato" class="form-select">
-                                <option value="">Facial</option>
-                                <option value="Facial">Facial</option>
-                                <option value="Barba">Barba</option>
-                                <option value="Acondicionar">Acondicionar</option>
-                                <option value="Alisar">Alisar</option>
-                                <option value="por_horas">Por Horas</option>
-                            </select>
-                            @error('tipocontrato')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
+        <div class="col-2 form-group">
+            <label for="empleado" class="form-label">Empleado</label>
+            <select id="empleado_id" name="empleado_id" class="form-select" required>
+                <option selected disabled>Seleccione un Empleado</option>
+                @foreach ($lempleado as $empleado)
+                    <option value="{{ $empleado->id }}">{{ $empleado->nombres }}</option>
+                @endforeach
+            </select>
+            @error('empleado')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
+    </div>
 
-                        <div class="col-2 form-group">
-                            <label for="empleadosAsignado" class="form-label">Empleados</label>
-                            <select id="empleadosAsignado" name="empleadosAsignado" class="form-select">
-                                <option value=""></option>
-                                <!-- Agrega opciones aquí -->
-                            </select>
-                            @error('empleadosAsignado')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
+  <div class="row">
+    <div class="col-2 form-group">
+        <label for="fecha" class="form-label">Fecha y Hora de Cita</label>
+        <input type="datetime-local" id="fecha" name="fecha" value="{{ old('fecha') }}" class="form-input" required>
+        @error('fecha')
+            <div class="error-message">{{ $message }}</div>
+        @enderror
+    </div>
+</div>
 
-                    <div class="row">
-                        <div class="col-2 form-group">
-                            <label for="datesemana" class="form-label">Fecha de Registro</label>
-                            <input type="datetime-local" id="datesemana" name="datesemana" value="{{ old('datesemana') }}" class="form-input">
-                            @error('datesemana')
-                                <div class="error-message">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
+     
+
+    
 
 
                         <div class="container mt-5">
@@ -200,26 +200,25 @@
         const calendarEl = document.getElementById('calendar');
 
         const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth', // Cambiado para mostrar la vista de mes inicialmente
-            events: [], // Inicialmente vacío
+            initialView: 'timeGridWeek',  // Cambiado a vista semanal
+            selectable: true,  // Permitir seleccionar intervalos de tiempo
+            events: [
+                {
+                    title: 'Cita Agendada',
+                    start: 'combinedDateTime',
+                    allDay: false  // Para que no sea todo el día, sino en una hora específica
+                }
+            ],
+            select: function(info) {
+                // Obtener la fecha y hora seleccionadas
+                const selectedDate = info.startStr.split("T")[0];  // Solo la fecha
+                const selectedTime = info.startStr.split("T")[1].substring(0, 5);  // Solo la hora
 
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-
-            dateClick: function(info) {
-                const selectedDate = info.dateStr;
+                // Colocar los valores en el modal
                 document.getElementById('modalDate').value = selectedDate;
-                document.getElementById('modalTime').value = ''; // Limpiar la hora
-                document.getElementById('editEventModal').classList.add(isVisible);
-            },
+                document.getElementById('modalTime').value = selectedTime;
 
-            eventClick: function(info) {
-                const event = info.event;
-                document.getElementById('modalDate').value = event.start.toISOString().split('T')[0]; // Solo la fecha
-                document.getElementById('modalTime').value = event.start.toTimeString().substring(0, 5); // Formato HH:mm
+                // Mostrar el modal
                 document.getElementById('editEventModal').classList.add(isVisible);
             }
         });
@@ -229,38 +228,37 @@
         document.getElementById('saveChanges').addEventListener('click', function() {
             const newDate = document.getElementById('modalDate').value;
             const newTime = document.getElementById('modalTime').value;
+            const combinedDateTime = `${newDate}T${newTime}`; 
 
-            if (!newTime) {
-                alert("Por favor, selecciona una hora.");
-                return; // Salir si no hay hora seleccionada
-            }
+    document.getElementById('fecha').value = combinedDateTime;
 
-            const combinedDateTime = `${newDate}T${newTime}`;
+            // Limpiar eventos anteriores
+            calendar.getEvents().forEach(event => {
+                if (event.title === 'Cita Agendada') {
+                    event.remove();
+                }
+            });
 
-            // Limpiar eventos anteriores solo si no es el mismo
-            const existingEvent = calendar.getEvents().find(event => event.title === 'Cita Agendada' && event.startStr === combinedDateTime);
-            if (!existingEvent) {
-                // Agregar el nuevo evento
-                calendar.addEvent({
-                    title: 'Cita Agendada',
-                    start: combinedDateTime,
-                    allDay: false // Cambia a false para manejar horas específicas
-                });
-            } else {
-                alert("Ya existe una cita agendada en este horario.");
-            }
+            // Agregar el nuevo evento
+            calendar.addEvent({
+                title: 'Cita Agendada',
+                start: combinedDateTime,
+                allDay: false  // No es evento de todo el día
+            });
 
             document.getElementById('editEventModal').classList.remove(isVisible);
         });
 
         document.getElementById('deleteEvent').addEventListener('click', function() {
-            const eventToDelete = calendar.getEvents().find(event => event.title === 'Cita Agendada');
-            if (eventToDelete) {
-                eventToDelete.remove();
-            }
+            calendar.getEvents().forEach(event => {
+                if (event.title === 'Cita Agendada') {
+                    event.remove();
+                }
+            });
 
-            document.getElementById('modalDate').value = '';
-            document.getElementById('modalTime').value = '';
+            document.getElementById('fechaSeleccionada').value = '';
+            document.getElementById('horaSeleccionada').value = '';
+            document.getElementById('fecha').value = '';
 
             document.getElementById('editEventModal').classList.remove(isVisible);
         });
@@ -272,9 +270,6 @@
 <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'></script>
 
 
-<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css' rel='stylesheet' />
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'></script>
 
 
 
@@ -586,11 +581,11 @@
 
 
 .modal-dialog {
-      background-image: 
-        linear-gradient(rgba(83, 78, 78, 0.534), rgba(65, 57, 57, 0.568)), 
-        url('images/barberia.png');
-     background-size: cover;
-     background-repeat: no-repeat;
+    background-image: 
+    linear-gradient(rgba(83, 78, 78, 0.534), rgba(65, 57, 57, 0.568)), 
+    url('images/barberia.png');
+    background-size: cover;
+    background-repeat: no-repeat;
     padding: 15px;
     filter: brightness(1);
     
