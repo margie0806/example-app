@@ -434,7 +434,6 @@
 .modal {
     z-index: 20000;
     display: none;
-    background-color: rgba(0, 0, 0, 0.5);
     position: fixed;
     top: 0;
     left: 0;
@@ -459,7 +458,9 @@
 
 
 .modal-dialog {
-    background-color: #241d2ee7;
+    background-image: 
+    linear-gradient(rgba(83, 78, 78, 0.534), rgba(65, 57, 57, 0.568)), 
+    url('{{ asset('images/barberia.png') }}');
     background-size: cover;
     background-repeat: no-repeat;
     padding: 15px;

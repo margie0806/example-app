@@ -10,16 +10,19 @@ class Agenda extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nombres',
-        'correo',
-        'telefono',
-        'tiposervicio',
-        'fecha',
-        'empleado_id'  // Se relaciona con el id del empleado
-    ];
+    'nombres',
+    'correo',
+    'telefono',
+    'tiposervicio',
+    'fecha',
+    'empleado_id'  // Asegúrate de que este campo esté presente, no 'empleado'
+];
 
-    public function empleado()
-    {
-        return $this->belongsTo(Empleado::class);
-    }
+  public function empleado()
+{
+    return $this->belongsTo(Empleado::class);
+}
+
+
+     
 }

@@ -4,14 +4,10 @@
             {{ __('Employee') }}
         </h2>
     </x-slot>
-    
-          
-
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-
                 <div class="container" style="margin: 5px; font-family: Arial, sans-serif; background-color: #ffff; padding: 70px; border-radius: 10px;">
                     @if ($errors->any())
                         <div class="alert alert-danger" style="margin-bottom: 20px; padding: 10px; border-radius: 5px; background-color: #f8d7da; color: #721c24;">
@@ -24,132 +20,89 @@
                     @endif
 
                     @if (session('success'))
-                <script>
-                    Swal.fire({
-                        title: 'Éxito',
-                        text: "{{ session('success') }}", // Use double quotes for JavaScript
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
-                </script>
-            @endif
-                  
-                   
-<form action="{{ route('agendacita.store') }}" method="POST">
-    @csrf
+                        <script>
+                            Swal.fire({
+                                title: 'Éxito',
+                                text: "{{ session('success') }}", // Use double quotes for JavaScript
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                        </script>
+                    @endif
 
-    <div class="row">
-        <div class="col-2 form-group">
-            <label for="nombres" class="form-label">Nombres Completos</label>
-            <input type="text" id="nombres" placeholder="Nombre" name="nombres" value="{{ old('nombres') }}" class="form-input-nombre" required>
-            @error('nombres')
-                <div class="error-message">{{ $message }}</div>
-            @enderror
-        </div>
-    </div>
+                    <form action="{{ route('agendacita.store') }}" method="POST">
+                        @csrf
 
-    <!-- Alineación de Correo y Teléfono lado a lado -->
-    <div class="row">
-        <div class="col-2 form-group">
-            <label for="correo" class="form-label">Correo</label>
-            <input type="email" id="correo" placeholder="Correo" name="correo" value="{{ old('correo') }}" class="form-input" required>
-            @error('correo')
-                <div class="error-message">{{ $message }}</div>
-            @enderror
-        </div>
-        
-        <div class="col-2 form-group">
-            <label for="telefono" class="form-label">Teléfono</label>
-            <input type="text" id="telefono" placeholder="Teléfono" name="telefono" value="{{ old('telefono') }}" class="form-input" required>
-            @error('telefono')
-                <div class="error-message">{{ $message }}</div>
-            @enderror
-        </div>
-    </div>
+                        <div class="row">
+                            <div class="col-2 form-group">
+                                <label for="nombres" class="form-label">Nombres Completos</label>
+                                <input type="text" id="nombres" placeholder="Nombre" name="nombres" value="{{ old('nombres') }}" class="form-input-nombre" required>
+                                @error('nombres')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
 
-    <div class="row">
-        <div class="col-2 form-group">
-            <label for="tiposervicio" class="form-label">Tipo Servicio</label>
-            <select id="tiposervicio" name="tiposervicio" class="form-select" required>
-                <option value="">Seleccione un Servicio</option>
-                <option value="Facial" {{ old('tiposervicio') == 'Facial' ? 'selected' : '' }}>Facial</option>
-                <option value="Barba" {{ old('tiposervicio') == 'Barba' ? 'selected' : '' }}>Barba</option>
-                <option value="Acondicionar" {{ old('tiposervicio') == 'Acondicionar' ? 'selected' : '' }}>Acondicionar</option>
-                <option value="Alisar" {{ old('tiposervicio') == 'Alisar' ? 'selected' : '' }}>Alisar</option>
-            </select>
-            @error('tiposervicio')
-                <div class="error-message">{{ $message }}</div>
-            @enderror
-        </div>
+                        <div class="row">
+                            <div class="col-2 form-group">
+                                <label for="correo" class="form-label">Correo</label>
+                                <input type="email" id="correo" placeholder="Correo" name="correo" value="{{ old('correo') }}" class="form-input" required>
+                                @error('correo')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="col-2 form-group">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input type="text" id="telefono" placeholder="Teléfono" name="telefono" value="{{ old('telefono') }}" class="form-input" required>
+                                @error('telefono')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
 
-        <div class="col-2 form-group">
-            <label for="empleado" class="form-label">Empleado</label>
-            <select id="empleado_id" name="empleado_id" class="form-select" required>
-                <option selected disabled>Seleccione un Empleado</option>
-                @foreach ($lempleado as $empleado)
-                    <option value="{{ $empleado->id }}">{{ $empleado->nombres }}</option>
-                @endforeach
-            </select>
-            @error('empleado')
-                <div class="error-message">{{ $message }}</div>
-            @enderror
-        </div>
-    </div>
+                        <div class="row">
+                            <div class="col-2 form-group">
+                                <label for="tiposervicio" class="form-label">Tipo Servicio</label>
+                                <select id="tiposervicio" name="tiposervicio" class="form-select" required>
+                                    <option value="">Seleccione un Servicio</option>
+                                    <option value="Facial" {{ old('tiposervicio') == 'Facial' ? 'selected' : '' }}>Facial</option>
+                                    <option value="Barba" {{ old('tiposervicio') == 'Barba' ? 'selected' : '' }}>Barba</option>
+                                    <option value="Acondicionar" {{ old('tiposervicio') == 'Acondicionar' ? 'selected' : '' }}>Acondicionar</option>
+                                    <option value="Alisar" {{ old('tiposervicio') == 'Alisar' ? 'selected' : '' }}>Alisar</option>
+                                </select>
+                                @error('tiposervicio')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-  <div class="row">
-    <div class="col-2 form-group">
-        <label for="fecha" class="form-label">Fecha y Hora de Cita</label>
-        <input type="datetime-local" id="fecha" name="fecha" value="{{ old('fecha') }}" class="form-input" required>
-        @error('fecha')
-            <div class="error-message">{{ $message }}</div>
-        @enderror
-    </div>
-</div>
+                            <div class="col-2 form-group">
+                                <label for="empleado" class="form-label">Empleado</label>
+                                <select id="empleado_id" name="empleado_id" class="form-select" required>
+                                    <option value="" disabled selected>Seleccione un Empleado</option>
+                                    @foreach ($lempleado as $empleado)
+                                        <option value="{{ $empleado->id }}">{{ $empleado->nombres }}</option>
+                                    @endforeach
+                                </select>
+                                @error('empleado_id')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
 
-     
-
-    
-
+                        <div class="row">
+                            <div class="col-2 form-group">
+                                <label for="fecha" class="form-label">Fecha y Hora de Cita</label>
+                                <input type="datetime-local" id="fecha" name="fecha" value="{{ old('fecha') }}" class="form-input" required>
+                                @error('fecha')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
 
                         <div class="container mt-5">
                             <div id='calendar'></div>
-
-                            <!-- Modal para modificar fecha y hora -->
-                            <div class="modal" id="editEventModal" data-animation="slideInOut">
-                                <div class="modal-dialog">
-                                    <header class="modal-header">
-                                        <h5>Asigna tus Citas: Hora y Fecha   <button class="close-modal" aria-label="close modal" data-close>
-                                            ✕  
-                                        </button></h5>
-                                        
-                                    </header>
-                                    <hr class="modal-header-hr">
-                                    <section class="modal-content">
-                                        <label  for="modalDate" class="label-con">Fecha:</label>
-                                        <br>
-                                        <input type="date" id="modalDate" class="form-control" required>
-                                        <br>
-                                        <label  for="modalTime" class="label-con" >Hora:</label>
-                                        <br>
-                                        <input type="time" id="modalTime" class="form-control" required>
-                                    </section>
-                                    <hr class="hr-footer">
-                                    <footer class="modal-footer">
-                                        
-                                        <button type="button" class="btn btn-secondary" data-close>Cancelar</button>
-                                        <button type="button" class="btn btn-primary" id="saveChanges">Guardar</button>
-                                        <button type="button" class="btn btn-danger" id="deleteEvent">Eliminar cita</button>
-                                    </footer>
-                                </div>
-                            </div>
-
-                           
-                            <!-- Campos ocultos para almacenar la fecha y hora -->
-                            <input type="hidden" id="fechaSeleccionada" name="fecha" value="">
-                            <input type="hidden" id="horaSeleccionada" name="hora" value="">
-                            
                         </div>
-
 
                         <div class="row" style="margin-top: 20px;">
                             <div class="col-2" style="margin-bottom: 5px; margin: 15px;">
@@ -163,114 +116,44 @@
     </div>
 </x-app-layout>
 
-
-
-
 <script>
-    const openEls = document.querySelectorAll("[data-open]");
-    const closeEls = document.querySelectorAll("[data-close]");
-    const isVisible = "is-visible";
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
+        selectable: true,
+        events: [],
+        select: function(info) {
+            const selectedDate = info.startStr.split("T")[0];
+            const selectedTime = info.startStr.split("T")[1].substring(0, 5);
 
-    for (const el of openEls) {
-        el.addEventListener("click", function() {
-            const modalId = this.dataset.open;
-            document.getElementById(modalId).classList.add(isVisible);
-        });
-    }
-
-    for (const el of closeEls) {
-        el.addEventListener("click", function() {
-            this.closest('.modal').classList.remove(isVisible);
-        });
-    }
-
-    document.addEventListener("click", e => {
-        if (e.target.classList.contains("modal") && e.target.classList.contains("is-visible")) {
-            e.target.classList.remove(isVisible);
-        }
-    });
-
-    document.addEventListener("keyup", e => {
-        if (e.key === "Escape" && document.querySelector(".modal.is-visible")) {
-            document.querySelector(".modal.is-visible").classList.remove(isVisible);
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const calendarEl = document.getElementById('calendar');
-
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'timeGridWeek',  // Cambiado a vista semanal
-            selectable: true,  // Permitir seleccionar intervalos de tiempo
-            events: [
-                {
-                    title: 'Cita Agendada',
-                    start: 'combinedDateTime',
-                    allDay: false  // Para que no sea todo el día, sino en una hora específica
-                }
-            ],
-            select: function(info) {
-                // Obtener la fecha y hora seleccionadas
-                const selectedDate = info.startStr.split("T")[0];  // Solo la fecha
-                const selectedTime = info.startStr.split("T")[1].substring(0, 5);  // Solo la hora
-
-                // Colocar los valores en el modal
-                document.getElementById('modalDate').value = selectedDate;
-                document.getElementById('modalTime').value = selectedTime;
-
-                // Mostrar el modal
-                document.getElementById('editEventModal').classList.add(isVisible);
-            }
-        });
-
-        calendar.render();
-
-        document.getElementById('saveChanges').addEventListener('click', function() {
-            const newDate = document.getElementById('modalDate').value;
-            const newTime = document.getElementById('modalTime').value;
-            const combinedDateTime = `${newDate}T${newTime}`; 
-
-    document.getElementById('fecha').value = combinedDateTime;
+            // Colocar los valores directamente en el input de fecha
+            document.getElementById('fecha').value = `${selectedDate}T${selectedTime}`;
 
             // Limpiar eventos anteriores
-            calendar.getEvents().forEach(event => {
-                if (event.title === 'Cita Agendada') {
-                    event.remove();
-                }
-            });
+            calendar.removeAllEvents(); // Eliminar todos los eventos antes de agregar uno nuevo
 
-            // Agregar el nuevo evento
+            // Agregar un evento al calendario
             calendar.addEvent({
-                title: 'Cita Agendada',
-                start: combinedDateTime,
-                allDay: false  // No es evento de todo el día
+                title: `Seleccionado: ${selectedDate} a las ${selectedTime}`,
+                start: info.start,
+                end: info.end,
+                classNames: ['selected-event'] // Añadir clase para estilo
             });
 
-            document.getElementById('editEventModal').classList.remove(isVisible);
-        });
-
-        document.getElementById('deleteEvent').addEventListener('click', function() {
-            calendar.getEvents().forEach(event => {
-                if (event.title === 'Cita Agendada') {
-                    event.remove();
-                }
-            });
-
-            document.getElementById('fechaSeleccionada').value = '';
-            document.getElementById('horaSeleccionada').value = '';
-            document.getElementById('fecha').value = '';
-
-            document.getElementById('editEventModal').classList.remove(isVisible);
-        });
+            // Desmarcar la selección
+            calendar.unselect(); // Desmarca la selección para que no se vea el área seleccionada
+        }
     });
+
+    calendar.render();
+});
 </script>
+
 
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css' rel='stylesheet' />
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'></script>
-
-
-
 
 
 
