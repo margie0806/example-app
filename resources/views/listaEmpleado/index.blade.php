@@ -401,11 +401,15 @@
     .editar-btn {
     border: 2px solid green; /* Contorno verde */
     color: green; /* Color del texto */
+    border-radius: 10px;
+     padding: 5px;
 }
 
 .eliminar-btn {
     border: 2px solid red; /* Contorno rojo */
     color: red; /* Color del texto */
+    border-radius: 10px;
+     padding: 5px;
 }
 
 .editar-btn:hover {

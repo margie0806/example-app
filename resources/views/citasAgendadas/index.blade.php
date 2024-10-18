@@ -35,7 +35,7 @@
                                         <a href="" class="btn btn-success editar-btn">
                                             <i class="bi bi-pencil"></i> Editar
                                         </a>
-                                        <a onclick="confirmDelete('{{ route('deleteCita.destroy', $agenda->id) }}')" class="btn btn-danger eliminar-btn">
+                                        <a onclick="confirmDelete('{{ route('deleteCitas.destroy', $agenda->id) }}')" class="btn btn-danger eliminar-btn">
                                             <i class="bi bi-trash"></i> Eliminar
                                         </a>
                                     </td>
@@ -49,7 +49,21 @@
     </div>
 </x-app-layout>
 
-<!-- Scripts jQuery y DataTables -->
+
+
+
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+
 <script>
     $(document).ready(function() {
         $('#example').DataTable({
@@ -60,7 +74,14 @@
             ]
         });
     });
-</script>
+    </script>
+
+
+
+
+
+
+
 
 <script>
     function confirmDelete(deleteUrl) {
@@ -75,15 +96,18 @@
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
+                // Crear un formulario dinámicamente
                 var form = document.createElement('form');
                 form.action = deleteUrl;
                 form.method = 'POST';
 
+                // Agregar token CSRF
                 var csrfToken = document.createElement('input');
                 csrfToken.type = 'hidden';
                 csrfToken.name = '_token';
-                csrfToken.value = '{{ csrf_token() }}';
+                csrfToken.value = '{{ csrf_token() }}'; // Usar Blade para obtener el token CSRF
 
+                // Agregar input de método
                 var methodInput = document.createElement('input');
                 methodInput.type = 'hidden';
                 methodInput.name = '_method';
@@ -91,9 +115,249 @@
 
                 form.appendChild(csrfToken);
                 form.appendChild(methodInput);
+
+                // Agregar el formulario al cuerpo y enviarlo
                 document.body.appendChild(form);
                 form.submit();
             }
         });
     }
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .editar-btn {
+    border: 2px solid green; /* Contorno verde */
+    color: green; /* Color del texto */
+     border-radius: 10px;
+     padding: 5px;
+}
+
+.eliminar-btn {
+    border-radius: 10px;
+    border: 2px solid red; /* Contorno rojo */
+    color: red; /* Color del texto */
+    margin-left: 30px;
+     padding: 5px;
+}
+
+.editar-btn:hover {
+    background-color: green; /* Fondo verde al pasar el ratón */
+    color: white; /* Texto blanco al pasar el ratón */
+}
+
+.eliminar-btn:hover {
+    background-color: red; /* Fondo rojo al pasar el ratón */
+    color: white; /* Texto blanco al pasar el ratón */
+}
+</style>

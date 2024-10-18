@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Agregar un evento al calendario
             calendar.addEvent({
-                title: `Seleccionado: ${selectedDate} a las ${selectedTime}`,
+                title: `Selec: ${selectedDate} a las ${selectedTime}`,
                 start: info.start,
                 end: info.end,
                 classNames: ['selected-event'] // Añadir clase para estilo
@@ -433,6 +433,12 @@ document.addEventListener('DOMContentLoaded', function() {
     /* Estilos para el calendario */
 #calendar {
     margin: 40px auto;
+}
+
+
+.selected-event {
+   width: 100%;
+   background-color: #00cdd4
 }
 
 /* Estilos para el modal */

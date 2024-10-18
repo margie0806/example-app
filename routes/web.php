@@ -33,6 +33,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/listaEmpleado', [EmpleadoController::class, 'show'])->name('listaEmpleado.index');
     Route::get('/citasAgendadas', [AgendaController::class, 'show'])->name('citasAgendadas.index');
+    Route::delete('/deleteCitas/{id}', [AgendaController::class, 'destroy'])->name('deleteCitas.destroy');
+
+
+      
+    Route::delete('/deleteEmpleado/{id}', [EmpleadoController::class, 'destroy'])->name('deleteEmpleado.destroy');
+
+
+
+
 
     // Rutas para manejar empleados (editar, actualizar y eliminar)
     Route::get('/editarEmpleados/{id}', [EmpleadoController::class, 'mostrarEdit'])->name('editarEmpleados.index');
