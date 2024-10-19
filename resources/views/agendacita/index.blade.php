@@ -92,28 +92,30 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-2 form-group">
-                                <label for="fecha" class="form-label">Fecha y Hora de Cita</label>
-                                <input type="datetime-local" id="fecha" name="fecha" value="{{ old('fecha') }}" class="form-input" required>
-                                @error('fecha')
-                                    <div class="error-message">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
+    <div class="col-2 form-group">
+        <label for="fecha" class="form-label">Fecha y Hora de Cita</label>
+        <input type="datetime-local" id="fecha" name="fecha" value="{{ old('fecha') }}" class="form-input" required>
+        <div id="mensaje-error" class="error-message"></div>
+        @error('fecha')
+            <div class="error-message">{{ $message }}</div>
+        @enderror
+    </div>
+</div>
 
 
 
+            
+                    <div class="justify">
+                 <h3>Fechas Disponibles</h3>
+                    <ul id="fechas-disponibles"></ul>
+                </div>
 
-                        <div>
-                        <h3>Fechas Disponibles</h3>
-                        <ul id="fechas-disponibles"></ul>
-                    </div>
+                <div class="justify">
+                    <h2>Empleado </h2>
+                    <div id="empleado-nombre"></div>
+                </div>
 
-                    <div>
-                        <h2>Empleado</h2>
-                        <ul id="empleado-seleccionado"></ul> <!-- Este es el nuevo div -->
-                    </div>
-
+                    <div id="mensaje-error" style="color: red;"></div> 
                         <div class="container mt-5">
                             <div id='calendar'></div>
                         </div>
@@ -130,9 +132,15 @@
     </div>
 </x-app-layout>
 
+
+
+
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
+    let fechasDisponibles = [];
+
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'timeGridWeek',
         selectable: true,
@@ -140,123 +148,121 @@ document.addEventListener('DOMContentLoaded', function() {
         select: function(info) {
             const selectedDate = info.startStr.split("T")[0];
             const selectedTime = info.startStr.split("T")[1].substring(0, 5);
+            const selectedEndTime = info.endStr.split("T")[1].substring(0, 5);
 
-            // Colocar los valores directamente en el input de fecha
-            document.getElementById('fecha').value = `${selectedDate}T${selectedTime}`;
+            const datetimeLocalFormat = `${selectedDate}T${selectedTime}`;
+            document.getElementById('fecha').value = datetimeLocalFormat;
 
-            // Limpiar eventos anteriores
-            calendar.removeAllEvents(); // Eliminar todos los eventos antes de agregar uno nuevo
+            if (fechasDisponibles.includes(selectedDate)) {
+                document.getElementById('mensaje-error').innerHTML = "La cita ha sido asignada exitosamente.";
+                document.getElementById('mensaje-error').style.color = "green";
 
-            // Agregar un evento al calendario
-            calendar.addEvent({
-                title: `Selec: ${selectedDate} a las ${selectedTime}`,
-                start: info.start,
-                end: info.end,
-                classNames: ['selected-event'] // Añadir clase para estilo
+                // Limpiar eventos anteriores
+                calendar.removeAllEvents();
+                calendar.addEvent({
+                    title: `Cita: ${selectedDate} a las ${selectedTime}`,
+                    start: info.start,
+                    end: info.end,
+                    classNames: ['selected-event']
+                });
+
+                // Mover el calendario a la fecha del evento
+                calendar.gotoDate(info.start); // Cambiar a la fecha del evento
+                calendar.setOption('scrollTime', selectedTime); // Asegurar que la hora seleccionada esté visible
+            } else {
+                document.getElementById('mensaje-error').innerHTML = "Error: La fecha seleccionada no está disponible.";
+                document.getElementById('mensaje-error').style.color = "red";
+            }
+
+            calendar.unselect(); // Desmarcar la selección
+        },
+        eventDidMount: function(info) {
+            tippy(info.el, {
+                content: `${info.event.title} (${info.event.start.toLocaleString('es-CO', { weekday: 'long' })})`,
+                placement: 'top',
+                arrow: true
             });
-
-            // Desmarcar la selección
-            calendar.unselect(); // Desmarca la selección para que no se vea el área seleccionada
         }
     });
 
     calendar.render();
-});
-</script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const calendarEl = document.getElementById('calendar');
-    const fechasContainer = document.getElementById('fechas-disponibles');
-    const empleadoContainer = document.getElementById('empleado-seleccionado'); // Nuevo contenedor
-    const fechaInput = document.getElementById('fecha');
-    const empleadoSelect = document.getElementById('empleado_id');
+    function obtenerFechaEmpleado(empleadoId) {
+        if (empleadoId) {
+            fetch(`/empleado/${empleadoId}/fechas`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la red');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    fechasDisponibles = data.datesemana;
+                    const fechasDisponiblesList = document.getElementById('fechas-disponibles');
+                    fechasDisponiblesList.innerHTML = '';
 
-    // Inicializar el calendario
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'timeGridWeek',
-        selectable: true,
-        events: [],
-        select: function(info) {
-            const selectedDate = info.startStr.split("T")[0];
-            const selectedTime = info.startStr.split("T")[1].substring(0, 5);
+                    // Limpiar eventos del calendario
+                    calendar.removeAllEvents();
 
-            // Colocar los valores directamente en el input de fecha
-            fechaInput.value = `${selectedDate}T${selectedTime}`;
+                    const fragment = document.createDocumentFragment();
+                    if (Array.isArray(data.datesemana)) {
+                        data.datesemana.forEach(fecha => {
+                            const li = document.createElement('li');
+                            li.textContent = `${new Date(fecha).toLocaleDateString('es-CO', { weekday: 'long' })} ${fecha}`;
+                            fragment.appendChild(li);
 
-            // Limpiar eventos anteriores
+                            calendar.addEvent({
+                                title: 'Disponible',
+                                start: fecha,
+                                end: new Date(new Date(fecha).getTime() + 3600000),
+                                classNames: ['available-date']
+                            });
+                        });
+                    } else {
+                        const li = document.createElement('li');
+                        li.textContent = `${new Date(data.datesemana).toLocaleDateString('es-CO', { weekday: 'long' })} ${data.datesemana}`;
+                        fragment.appendChild(li);
+
+                        calendar.addEvent({
+                            title: 'Disponible',
+                            start: data.datesemana,
+                            end: new Date(new Date(data.datesemana).getTime() + 3600000),
+                            classNames: ['available-date']
+                        });
+                    }
+
+                    fechasDisponiblesList.appendChild(fragment);
+                    document.getElementById('empleado-nombre').innerHTML = `${data.nombres} ${data.apellidos}`;
+
+                    // Limpiar el campo de fecha al cambiar de empleado
+                    document.getElementById('fecha').value = ''; // Limpia el campo de fecha
+                    document.getElementById('mensaje-error').innerHTML = ''; // Limpia cualquier mensaje de error
+                })
+                .catch(error => console.error('Error al obtener los datos del empleado:', error));
+        } else {
+            document.getElementById('fechas-disponibles').innerHTML = '';
+            document.getElementById('empleado-nombre').innerHTML = '';
             calendar.removeAllEvents();
-
-            // Agregar un evento al calendario
-            calendar.addEvent({
-                title: `Selec: ${selectedDate} a las ${selectedTime}`,
-                start: info.start,
-                end: info.end,
-                classNames: ['selected-event']
-            });
-
-            // Desmarcar la selección
-            calendar.unselect();
+            document.getElementById('fecha').value = ''; // Limpia el campo de fecha si no hay empleado
+            document.getElementById('mensaje-error').innerHTML = ''; // Limpia el mensaje de error
         }
-    });
-
-    calendar.render();
-
-    // Evento de cambio en el selector de empleado
-    empleadoSelect.addEventListener('change', function() {
-        const empleadoId = this.value;
-        const empleadoNombre = empleadoSelect.options[empleadoSelect.selectedIndex].text; // Obtener el nombre del empleado
-        fetchAvailableDates(empleadoId);
-
-        // Actualizar el contenedor del empleado seleccionado
-        empleadoContainer.innerHTML = ''; // Limpiar contenido previo
-        const empleadoItem = document.createElement('li');
-        empleadoItem.textContent = empleadoNombre; // Añadir nombre del empleado
-        empleadoContainer.appendChild(empleadoItem);
-    });
-
-    function fetchAvailableDates(empleadoId) {
-        fetch(`/fechas-disponibles/${empleadoId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error en la red');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Limpiar el contenedor de fechas
-                fechasContainer.innerHTML = '';
-
-                if (data.length === 0) {
-                    const noDatesItem = document.createElement('li');
-                    noDatesItem.textContent = 'No hay fechas disponibles';
-                    fechasContainer.appendChild(noDatesItem);
-                } else {
-                    // Solo tomar la primera fecha disponible
-                    const firstAvailableDate = data[0];
-                    const listItem = document.createElement('li');
-                    listItem.textContent = firstAvailableDate;
-                    fechasContainer.appendChild(listItem);
-
-                    // Establecer la fecha en el input
-                    fechaInput.value = firstAvailableDate;
-
-                    // Agregar el evento al calendario para la primera fecha
-                    calendar.addEvent({
-                        title: `Fecha seleccionada: ${firstAvailableDate}`,
-                        start: firstAvailableDate,
-                        end: firstAvailableDate, // o cambiar según el tiempo deseado
-                        classNames: ['selected-event']
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching fechas disponibles:', error);
-            });
     }
+
+    document.getElementById('empleado_id').addEventListener('change', function() {
+        const empleadoId = this.value;
+        obtenerFechaEmpleado(empleadoId);
+    });
 });
+
 </script>
 
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
 
 
 
@@ -692,5 +698,25 @@ margin-top: 20px;
     background-color: #5a6268; /* Cambia el color de fondo al pasar el cursor */
     border-color: #00f7ff; /* Cambia el color del borde al pasar el cursor */
 }
+
+
+
+.justify {
+    display: inline-block; /* Para que se alineen uno al lado del otro */
+    width: 45%; /* Ajusta el tamaño según lo necesario */
+    vertical-align: top; /* Alinea los elementos en la parte superior */
+    margin: 1%; /* Espaciado entre los divs */
+}
+
+ul {
+    list-style-type: none; /* Quitar los puntos de la lista */
+    padding: 0;
+    margin: 0;
+}
+
+h3, h2 {
+    margin-bottom: 10px; /* Añadir espacio debajo de los títulos */
+}
+
 
 </style>

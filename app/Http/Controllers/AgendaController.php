@@ -9,28 +9,44 @@ use Carbon\Carbon;
 
 class AgendaController extends Controller
 {
-    
-   
-public function index()
-{
-    // Obtiene todos los empleados para mostrarlos en la vista
-    $lempleado = Empleado::all();
-
-    // Obtiene las fechas disponibles para cada empleado
-    $fechasDisponibles = [];
-    foreach ($lempleado as $empleado) {
-        $fechasDisponibles[$empleado->id] = $empleado->getFechasDisponibles();
+    public function index()
+    {
+        // Obtiene todos los empleados para mostrarlos en la vista
+        $lempleado = Empleado::all();
+        return view('agendacita.index', ['lempleado' => $lempleado]);
     }
 
-    return view('agendacita.index', ['lempleado' => $lempleado, 'fechasDisponibles' => $fechasDisponibles]);
-}
+    public function getEmpleadoFecha($empleadoId)
+    {
+        // Obtén el empleado por ID
+        $empleado = Empleado::findOrFail($empleadoId);
+        
+        // Aquí puedes definir tu lógica para obtener las fechas disponibles
+        $fechasDisponibles = []; // Inicializa el array para almacenar las fechas
+
+        // Lógica para llenar el array con fechas disponibles
+        $agendas = Agenda::where('empleado_id', $empleadoId)
+                         ->where('fecha', '>=', Carbon::now()) // Solo fechas futuras
+                         ->get();
+
+        foreach ($agendas as $agenda) {
+            // Agrega la fecha de la agenda al array de fechas disponibles
+            $fechasDisponibles[] = $agenda->fecha->format('Y-m-d H:i'); // Formato de fecha y hora
+        }
+
+        return response()->json([
+            'datesemana' => $empleado->datesemana,
+            'nombres' => $empleado->nombres,
+            'apellidos' => $empleado->apellidos,
+        ]);
+    }
 
     // Método para mostrar todas las citas agendadas
     public function show(Request $request)
     {
         // Obtiene todas las citas de la tabla Agenda
         $lecitas = Agenda::all();
-        return view('citasAgendadas.index', ['lecitas' => $lecitas]); // Se usa 'lecitas' aquí
+        return view('citasAgendadas.index', ['lecitas' => $lecitas]);
     }
 
     // Método para eliminar una cita agendada
@@ -55,20 +71,20 @@ public function index()
             'telefono' => 'required',
             'tiposervicio' => 'required|string|max:255',
             'fecha' => 'required|date|after:today',
-            'empleado_id' => 'required|exists:empleados,id',  // Asegúrate de que el empleado exista
+            'empleado_id' => 'required|exists:empleados,id',
         ]);
 
         // Busca la agenda por su ID
         $agenda = Agenda::findOrFail($id);
 
-        // Actualiza los datos de la agenda con los valores enviados en el formulario
+        // Actualiza los datos de la agenda
         $agenda->update([
             'nombres' => $request->input('nombres'),
             'correo' => $request->input('correo'),
             'telefono' => $request->input('telefono'),
             'tiposervicio' => $request->input('tiposervicio'),
             'fecha' => $request->input('fecha'),
-            'empleado_id' => $request->input('empleado_id'),  // Asegúrate de que este campo se esté recibiendo
+            'empleado_id' => $request->input('empleado_id'),
         ]);
 
         // Mensaje de éxito
@@ -94,23 +110,7 @@ public function index()
     public function create()
     {
         $lempleado = Empleado::all(); // Obtén todos los empleados
-
-        // Lógica para obtener las fechas disponibles de cada empleado
-        $fechasDisponibles = [];
-        foreach ($lempleado as $empleado) {
-            // Aquí podrías tener una función que devuelva las fechas disponibles para cada empleado.
-            $fechasDisponibles[$empleado->id] = $empleado->getFechasDisponibles(); // Asegúrate de definir este método en el modelo Empleado
-        }
-
-        return view('agendacita.create', compact('lempleado', 'fechasDisponibles'));
-    }
-
-    public function obtenerFechasDisponibles($empleado_id)
-    {
-        $empleado = Empleado::findOrFail($empleado_id);
-        $fechasDisponibles = $empleado->getFechasDisponibles();
-
-        return response()->json($fechasDisponibles);
+        return view('agendacita.create', compact('lempleado'));
     }
 
     // Método para almacenar una nueva cita
@@ -127,7 +127,7 @@ public function index()
         ]);
 
         // Formateo de la fecha usando Carbon
-        $fecha = Carbon::parse($validatedData['fecha'])->format('Y-m-d H:i:s'); // Ajustado para incluir hora
+        $fecha = Carbon::parse($validatedData['fecha'])->format('Y-m-d H:i:s');
 
         // Guardar la nueva cita en la base de datos
         Agenda::create([

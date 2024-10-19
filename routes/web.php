@@ -39,7 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
    
 
 
-
+    Route::get('/agendafecha/{empleadoId}', [AgendaController::class, 'show'])->name('agendacita.index');
 
 
     // DATOS DE LA AGENDA ACTUALIZAR EDITAR ELIMINAR  
@@ -47,8 +47,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/updateAgendado/{id}', [AgendaController::class, 'update'])->name('updateAgendado.update');
     Route::get('/editarAgendados/{id}', [AgendaController::class, 'editAgendado'])->name('editarAgendados.index');
 
-Route::get('/fechas-disponibles/{empleado_id}', [AgendaController::class, 'obtenerFechasDisponibles']);
 
+   
 
 
 
@@ -62,6 +62,8 @@ Route::get('/fechas-disponibles/{empleado_id}', [AgendaController::class, 'obten
 
 
     // Rutas Agedas
+    Route::get('/agendafecha/{empleadoId}', [AgendaController::class, 'show'])->name('agendacita.index');
+      Route::get('/empleado/{empleadoId}/fechas', [AgendaController::class, 'getEmpleadoFecha'])->name('empleado.fechas');
     Route::get('/agendacita', [AgendaController::class, 'index'])->name('agendacita.index');
     
 });
