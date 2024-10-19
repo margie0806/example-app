@@ -9,13 +9,21 @@ use Carbon\Carbon;
 
 class AgendaController extends Controller
 {
-    // Método para mostrar la lista de citas
-    public function index()
-    {
-        // Obtiene todos los empleados para mostrarlos en la vista
-        $lempleado = Agenda::all();
-        return view('agendacita.index', ['lempleado' => $lempleado]);
+    
+   
+public function index()
+{
+    // Obtiene todos los empleados para mostrarlos en la vista
+    $lempleado = Empleado::all();
+
+    // Obtiene las fechas disponibles para cada empleado
+    $fechasDisponibles = [];
+    foreach ($lempleado as $empleado) {
+        $fechasDisponibles[$empleado->id] = $empleado->getFechasDisponibles();
     }
+
+    return view('agendacita.index', ['lempleado' => $lempleado, 'fechasDisponibles' => $fechasDisponibles]);
+}
 
     // Método para mostrar todas las citas agendadas
     public function show(Request $request)
@@ -38,6 +46,73 @@ class AgendaController extends Controller
         return to_route('citasAgendadas.index');
     }
 
+    public function update(Request $request, $id)
+    {
+        // Valida los datos enviados en el formulario
+        $request->validate([
+            'nombres' => 'required|string|max:255',
+            'correo' => 'required|string|max:255',
+            'telefono' => 'required',
+            'tiposervicio' => 'required|string|max:255',
+            'fecha' => 'required|date|after:today',
+            'empleado_id' => 'required|exists:empleados,id',  // Asegúrate de que el empleado exista
+        ]);
+
+        // Busca la agenda por su ID
+        $agenda = Agenda::findOrFail($id);
+
+        // Actualiza los datos de la agenda con los valores enviados en el formulario
+        $agenda->update([
+            'nombres' => $request->input('nombres'),
+            'correo' => $request->input('correo'),
+            'telefono' => $request->input('telefono'),
+            'tiposervicio' => $request->input('tiposervicio'),
+            'fecha' => $request->input('fecha'),
+            'empleado_id' => $request->input('empleado_id'),  // Asegúrate de que este campo se esté recibiendo
+        ]);
+
+        // Mensaje de éxito
+        session()->flash('success', 'Datos actualizados correctamente');
+
+        // Retornar a la ruta de lista de empleados
+        return to_route('editarAgendados.index', ['id' => $id]);
+    }
+
+    public function editAgendado($id)
+    {
+        // Busca la agenda por su ID
+        $agenda = Agenda::findOrFail($id);
+
+        // Obtén la lista de empleados
+        $lempleado = Empleado::all();
+
+        // Retorna la vista con la agenda y los empleados
+        return view('editarAgendados.index', compact('agenda', 'lempleado'));
+    }
+
+    // Método para mostrar el formulario de creación de citas
+    public function create()
+    {
+        $lempleado = Empleado::all(); // Obtén todos los empleados
+
+        // Lógica para obtener las fechas disponibles de cada empleado
+        $fechasDisponibles = [];
+        foreach ($lempleado as $empleado) {
+            // Aquí podrías tener una función que devuelva las fechas disponibles para cada empleado.
+            $fechasDisponibles[$empleado->id] = $empleado->getFechasDisponibles(); // Asegúrate de definir este método en el modelo Empleado
+        }
+
+        return view('agendacita.create', compact('lempleado', 'fechasDisponibles'));
+    }
+
+    public function obtenerFechasDisponibles($empleado_id)
+    {
+        $empleado = Empleado::findOrFail($empleado_id);
+        $fechasDisponibles = $empleado->getFechasDisponibles();
+
+        return response()->json($fechasDisponibles);
+    }
+
     // Método para almacenar una nueva cita
     public function store(Request $request)
     {
@@ -45,8 +120,8 @@ class AgendaController extends Controller
         $validatedData = $request->validate([
             'nombres' => 'required|string|max:255',
             'correo' => 'required|email',
-            'telefono' => 'required|string|max:15', // Puedes ajustar el tamaño según lo que necesites
-            'tiposervicio' => 'required|string|max:255', // Añadir validación de tipo
+            'telefono' => 'required|string|max:15',
+            'tiposervicio' => 'required|string|max:255',
             'empleado_id' => 'required|exists:empleados,id',
             'fecha' => 'required|date_format:Y-m-d\TH:i',
         ]);

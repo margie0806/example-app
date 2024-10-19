@@ -31,13 +31,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('empleado.index');
     })->name('empleado.index');
 
+
+    //Rutas de Empleados
+
     Route::get('/listaEmpleado', [EmpleadoController::class, 'show'])->name('listaEmpleado.index');
     Route::get('/citasAgendadas', [AgendaController::class, 'show'])->name('citasAgendadas.index');
-    Route::delete('/deleteCitas/{id}', [AgendaController::class, 'destroy'])->name('deleteCitas.destroy');
+   
 
 
-      
-    Route::delete('/deleteEmpleado/{id}', [EmpleadoController::class, 'destroy'])->name('deleteEmpleado.destroy');
+
+
+
+    // DATOS DE LA AGENDA ACTUALIZAR EDITAR ELIMINAR  
+     Route::delete('/deleteCitas/{id}', [AgendaController::class, 'destroy'])->name('deleteCitas.destroy');
+    Route::put('/updateAgendado/{id}', [AgendaController::class, 'update'])->name('updateAgendado.update');
+    Route::get('/editarAgendados/{id}', [AgendaController::class, 'editAgendado'])->name('editarAgendados.index');
+
+Route::get('/fechas-disponibles/{empleado_id}', [AgendaController::class, 'obtenerFechasDisponibles']);
+
 
 
 
@@ -48,7 +59,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/updatempleado/{id}', [EmpleadoController::class, 'update'])->name('updatempleado.update');
     Route::delete('/deleteEmpleado/{id}', [EmpleadoController::class, 'destroy'])->name('deleteEmpleado.destroy');
 
-    // Rutas relacionadas con la agenda de citas
+
+
+    // Rutas Agedas
     Route::get('/agendacita', [AgendaController::class, 'index'])->name('agendacita.index');
     
 });

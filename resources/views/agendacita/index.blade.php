@@ -83,6 +83,7 @@
                                     @foreach ($lempleado as $empleado)
                                         <option value="{{ $empleado->id }}">{{ $empleado->nombres }}</option>
                                     @endforeach
+
                                 </select>
                                 @error('empleado_id')
                                     <div class="error-message">{{ $message }}</div>
@@ -99,6 +100,19 @@
                                 @enderror
                             </div>
                         </div>
+
+
+
+
+                        <div>
+                        <h3>Fechas Disponibles</h3>
+                        <ul id="fechas-disponibles"></ul>
+                    </div>
+
+                    <div>
+                        <h2>Empleado</h2>
+                        <ul id="empleado-seleccionado"></ul> <!-- Este es el nuevo div -->
+                    </div>
 
                         <div class="container mt-5">
                             <div id='calendar'></div>
@@ -149,6 +163,102 @@ document.addEventListener('DOMContentLoaded', function() {
     calendar.render();
 });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarEl = document.getElementById('calendar');
+    const fechasContainer = document.getElementById('fechas-disponibles');
+    const empleadoContainer = document.getElementById('empleado-seleccionado'); // Nuevo contenedor
+    const fechaInput = document.getElementById('fecha');
+    const empleadoSelect = document.getElementById('empleado_id');
+
+    // Inicializar el calendario
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
+        selectable: true,
+        events: [],
+        select: function(info) {
+            const selectedDate = info.startStr.split("T")[0];
+            const selectedTime = info.startStr.split("T")[1].substring(0, 5);
+
+            // Colocar los valores directamente en el input de fecha
+            fechaInput.value = `${selectedDate}T${selectedTime}`;
+
+            // Limpiar eventos anteriores
+            calendar.removeAllEvents();
+
+            // Agregar un evento al calendario
+            calendar.addEvent({
+                title: `Selec: ${selectedDate} a las ${selectedTime}`,
+                start: info.start,
+                end: info.end,
+                classNames: ['selected-event']
+            });
+
+            // Desmarcar la selección
+            calendar.unselect();
+        }
+    });
+
+    calendar.render();
+
+    // Evento de cambio en el selector de empleado
+    empleadoSelect.addEventListener('change', function() {
+        const empleadoId = this.value;
+        const empleadoNombre = empleadoSelect.options[empleadoSelect.selectedIndex].text; // Obtener el nombre del empleado
+        fetchAvailableDates(empleadoId);
+
+        // Actualizar el contenedor del empleado seleccionado
+        empleadoContainer.innerHTML = ''; // Limpiar contenido previo
+        const empleadoItem = document.createElement('li');
+        empleadoItem.textContent = empleadoNombre; // Añadir nombre del empleado
+        empleadoContainer.appendChild(empleadoItem);
+    });
+
+    function fetchAvailableDates(empleadoId) {
+        fetch(`/fechas-disponibles/${empleadoId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la red');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Limpiar el contenedor de fechas
+                fechasContainer.innerHTML = '';
+
+                if (data.length === 0) {
+                    const noDatesItem = document.createElement('li');
+                    noDatesItem.textContent = 'No hay fechas disponibles';
+                    fechasContainer.appendChild(noDatesItem);
+                } else {
+                    // Solo tomar la primera fecha disponible
+                    const firstAvailableDate = data[0];
+                    const listItem = document.createElement('li');
+                    listItem.textContent = firstAvailableDate;
+                    fechasContainer.appendChild(listItem);
+
+                    // Establecer la fecha en el input
+                    fechaInput.value = firstAvailableDate;
+
+                    // Agregar el evento al calendario para la primera fecha
+                    calendar.addEvent({
+                        title: `Fecha seleccionada: ${firstAvailableDate}`,
+                        start: firstAvailableDate,
+                        end: firstAvailableDate, // o cambiar según el tiempo deseado
+                        classNames: ['selected-event']
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching fechas disponibles:', error);
+            });
+    }
+});
+</script>
+
+
+
 
 
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css' rel='stylesheet' />

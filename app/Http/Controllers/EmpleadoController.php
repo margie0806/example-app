@@ -46,6 +46,8 @@ public function citaAsignada($id)
 
 
 
+    
+
 
         public function update(Request $request, $id)
     {
@@ -86,6 +88,8 @@ public function citaAsignada($id)
     }
 
 
+    
+
     public function store(Request $request)
     {  
         $validatedData = $request->validate([
@@ -110,6 +114,7 @@ public function citaAsignada($id)
             'telefono'=>request('telefono'),
             'tipocontrato'=>request('tipocontrato'),
             'datesemana'=> request('datesemana'),
+            
 
         ]);
        

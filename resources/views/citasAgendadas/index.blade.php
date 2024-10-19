@@ -32,7 +32,7 @@
                                     <td>{{ $agenda->fecha }}</td>
                                     <td>{{ $agenda->empleado->nombres ?? 'N/A' }}</td>
                                     <td>
-                                        <a href="" class="btn btn-success editar-btn">
+                                        <a href="{{ route('editarAgendados.index', $agenda->id) }}" class="btn btn-success editar-btn">
                                             <i class="bi bi-pencil"></i> Editar
                                         </a>
                                         <a onclick="confirmDelete('{{ route('deleteCitas.destroy', $agenda->id) }}')" class="btn btn-danger eliminar-btn">
