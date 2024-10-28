@@ -144,11 +144,11 @@
                             <input type="hidden" id="horaSeleccionada" name="hora" value="">
                         </div>
 
-                        <div class="row" style="margin-top: 20px;">
-                            <div class="col-2">
-                                <button type="submit" class="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
-                                    Actualizar Datos
-                                </button>
+                    </div> <!-- Botón de Guardar -->
+                    <div class="row" style="text-align: center;">
+                        <button type="submit" style="background-color: #6f3daf; color: white; padding: 15px 100px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin-top: 20px; border-radius: 5px; border: none; cursor: pointer;">
+                            Actualizar datos                       
+                        </button>
                             </div>
                         </div>
                     </form>
@@ -460,7 +460,7 @@
 .modal-dialog {
     background-image: 
     linear-gradient(rgba(83, 78, 78, 0.534), rgba(65, 57, 57, 0.568)), 
-    url('{{ asset('images/barberia.png') }}');
+    url('{{ asset('images/peluqueria.png') }}');
     background-size: cover;
     background-repeat: no-repeat;
     padding: 15px;
@@ -558,7 +558,7 @@ margin-top: 20px;
 }
 
 .btn-secondary {
-    background-color: #6c757d;
+    background-color: #7d6c76;
     border: 1px solid #4e4e4e;
     border-radius: 10px;
     color: white;

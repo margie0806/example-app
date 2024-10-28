@@ -104,13 +104,13 @@
 
                         <div class="container mt-5">
                             <div id='calendar'></div>
-                        </div>
-
-                        <div class="row" style="margin-top: 20px;">
-                            <div class="col-2">
-                                <button type="submit" class="mt-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                            <div class="row" style="display: flex; justify-content: center; text-align: center;">
+                                <button type="submit" style="background-color: #d86490; color: white; padding: 15px 100px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin-top: 20px; border-radius: 5px; border: none; cursor: pointer;">
                                     Actualizar Agenda
                                 </button>
+                        </div>
+
+                 
                             </div>
                         </div>
                     </form>
@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .selected-event {
    width: 100%;
-   background-color: #00cdd4
+   background-color: #c94e87
 }
 
 /* Estilos para el modal */

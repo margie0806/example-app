@@ -149,13 +149,13 @@
                             <input type="hidden" id="fechaSeleccionada" name="fecha" value="">
                             <input type="hidden" id="horaSeleccionada" name="hora" value="">
                             
+                        </div> <!-- Botón de Guardar -->
+                        <div class="row" style="display: flex; justify-content: center; text-align: center;">
+                            <button type="submit" style="background-color: #f75593; color: white; padding: 15px 100px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin-top: 20px; border-radius: 5px; border: none; cursor: pointer;">
+                                Guardar
+                            </button>                       
+                            
                         </div>
-
-
-                        <div class="row" style="margin-top: 20px;">
-                            <div class="col-2" style="margin-bottom: 5px; margin: 15px;">
-                                <button type="submit" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; background-color: #000000; color: #fff; cursor: pointer;">Guardar</button>
-                            </div>
                         </div>
                     </form>
                 </div>
@@ -331,7 +331,7 @@
 .modal-dialog {
     background-image: 
     linear-gradient(rgba(83, 78, 78, 0.534), rgba(65, 57, 57, 0.568)), 
-    url('{{ asset('images/barberia.png') }}');
+    url('{{ asset('images/peluqueria.png') }}');
     background-size: cover;
     background-repeat: no-repeat;
     padding: 15px;
@@ -397,7 +397,7 @@ margin-top: 20px;
 }
 
 .btn-primary {
-    background-color: #007bff;
+    background-color: #ff006a;
     border: 1px solid #4e4e4e;
     border-radius: 10px;
     color: white;
@@ -412,7 +412,7 @@ margin-top: 20px;
 }
 
 .btn-danger {
-    background-color: #dc3545;
+    background-color: #dd1021;
     border: 1px solid #4e4e4e;
     border-radius: 10px;
     color: white;
@@ -428,7 +428,7 @@ margin-top: 20px;
 }
 
 .btn-secondary {
-    background-color: #6c757d;
+    background-color: #2da774;
     border: 1px solid #4e4e4e;
     border-radius: 10px;
     color: white;

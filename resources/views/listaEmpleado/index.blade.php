@@ -1,3 +1,4 @@
+<!-- DataTables CSS -->
 
 <x-app-layout>
     <x-slot name="header">
@@ -5,12 +6,13 @@
             {{ __('Listado Empleados') }}
         </h2>
     </x-slot>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <div class="py-12">
-        <div class="max-w-9xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <h2 class="mt-4 text-xl text-center text text-gray-800 font-semibold">Listado Empleados</h2>
+                <h2 class="mt-2 text-xl text-center text text-gray-800 font-semibold">Listado Empleados</h2>
                 <div class="col-12">
                     <!-- -->
                     <table id="example" class="table table-striped" style="width:100%">
@@ -24,15 +26,16 @@
                             <th scope="col">Direccion</th>
                             <th scope="col">Telefono</th>
                             <th scope="col">Tipo contrato</th>
-                            <th scope="col">Fecha</th>
+                            <th scope="col">fecha</th>
                             <th scope="col">Acciones</th>
                             <th scope="col"></th>
 
                         </tr>
                         </thead>
                         <tbody>
-                        @php $secuencia = 1; @endphp
-                         @foreach ($lempleado as $empleado) 
+                            
+                            @php $secuencia = 1; @endphp
+                            @foreach ($lempleado as $empleado)
 
                           <tr>
                             <th scope="row">{{ $empleado->identificacion }}</th>
@@ -43,30 +46,21 @@
                             <td>{{ $empleado->telefono }}</td>
                             <td>{{ $empleado->tipocontrato }}</td>
                             <td>{{ $empleado->datesemana }}</td>
-                            
-                           <td>
-                        <a href="{{ route('editarEmpleados.index', $empleado->id) }}" class="btn btn-success editar-btn">
-                            <i class="bi bi-pencil"></i> Editar
-                        </a>
-                    </td>
-                    <td>
-                        <a onclick="confirmDelete('{{ route('deleteEmpleado.destroy', $empleado->id) }}')" class="btn btn-danger eliminar-btn">
-                            <i class="bi bi-pencil"></i> Eliminar
-                        </a>
-                    </td>
+                            <td><a href="{{route('editarEmpleados.index', $empleado->id) }}" class="btn btn-success">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a></td>
+                            <td><a onclick="confirmDelete('{{ route('deleteEmpleado.destroy', $empleado->id) }}')" class="btn btn-danger">
+                                <i class="bi bi-pencil"></i> Eliminar
+                            </a></td>
+                          </tr>
                           @endforeach
                         </tbody>
                       </table>
-
                 </div>
             </div>
         </div>
     </div>
 </x-app-layout>
-
-
-
-
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <!-- DataTables JS -->
@@ -88,6 +82,7 @@
         });
     });
     </script>
+
 
 
 <script>
@@ -130,10 +125,6 @@
         });
     }
 </script>
-
-
-
-
 
 
 
